@@ -1,5 +1,5 @@
 #coding=utf8
-from config import chars,num,space,sym
+from config import chars,num,space,sym,keywords
 code  = open("my.cpp").read()
 
 class wordParse():
@@ -9,6 +9,7 @@ class wordParse():
         self.buff = ""
         self.status = 0
         self.time = 0
+        self.resultset = []
     def getCh(self):
         # print '%d====%s'%(len(self.code),self.index)
         if(self.index==len(self.code)):
@@ -24,13 +25,16 @@ class wordParse():
         if self.index >= 1 :
             self.index -=1
     def parseSym(self):
-        print "<%s,sym>"%(self.buff)
+        self.resultset.append({self.buff:'sym'})
         self.flushBuff()
     def parseNum(self):
-        print "<%s,num>"%(self.buff)
+        self.resultset.append({self.buff:'num'})
         self.flushBuff()
     def parseDef(self):
-        print "<%s,def>"%(self.buff)
+        if self.buff in keywords:
+            self.resultset.append({self.buff:'keyword'})
+        else:
+            self.resultset.append({self.buff:'def'})
         self.flushBuff()
     def runError(self):
         print "%s<error"%(self.code[:self.index])
@@ -39,7 +43,7 @@ class wordParse():
     def getWord(self):
         while True:
             try:
-                print self.status
+                #print self.status
                 if self.status == 0 :
                     #状态0：缓冲区为空
                     ch = self.getCh()
@@ -114,7 +118,8 @@ class wordParse():
 def main():
     word = wordParse(code)
     word.getWord()
-    print code
+    for worditem in word.resultset:
+        print worditem
 
 if __name__ == '__main__':
     main()

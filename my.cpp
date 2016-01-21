@@ -1,6 +1,7 @@
 #include<iostream>
 using namespace std;
 int main(){
-	int a = 1;
+	int _a = 1;
 	cout<<a<<endl;
+	float x = _a;
 }
